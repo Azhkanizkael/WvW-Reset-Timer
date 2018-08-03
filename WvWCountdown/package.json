@@ -1,0 +1,10 @@
+{
+  "name": "wvwcountdowntimer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "author": "Azhkanizkael",
+  "dependencies": {
+    "discord.js": "^11.3.2"
+  }
+}
