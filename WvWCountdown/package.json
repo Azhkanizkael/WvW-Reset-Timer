@@ -7,6 +7,7 @@
   "dependencies": {
     "countdown": "^2.6.0",
     "discord.js": "^11.3.2",
+    "rebirth": "^2.0.0",
     "request": "^2.87.0"
   }
 }

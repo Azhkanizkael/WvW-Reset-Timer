@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const countdown = require('countdown');
 const request = require('request');
+const rebirth = require('rebirth');
 var auth = require('./auth.json');
 const client = new Discord.Client();
 var url = 'https://api.guildwars2.com/v2/wvw/matches/1-1?access_token=' + auth.gw2token;
@@ -24,7 +25,11 @@ if (err) { return console.log(err); }
             var vEndTime = body.end_time;
             var datetime = countdown(new Date(),new Date(vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
             console.log(datetime);
-            client.user.setActivity(datetime)
+            client.user.setActivity(datetime);
+            if ( Date.parse(new Date()) > Date.parse(vEndTime)){
+                console.log("rebith");
+                rebirth();
+            };
         }, 60000)
     });
     client.login(auth.token);
