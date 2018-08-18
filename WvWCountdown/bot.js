@@ -1,36 +1,37 @@
 const Discord = require('discord.js');
 const countdown = require('countdown');
 const request = require('request');
-const rebirth = require('rebirth');
 var auth = require('./auth.json');
 const client = new Discord.Client();
 var url = 'https://api.guildwars2.com/v2/wvw/matches/1-1?access_token=' + auth.gw2token;
 
-var req = request.get(url, { json: true }, (err, res, body) => {
-if (err) { return console.log(err); }
-    var vEndTime = body.end_time;
-    // Initialize Discord Bot
-    client.on('ready', () => {
-        console.log(`Logged in as ${client.user.tag}!`);
-        console.log(`WvW Ends at: ${vEndTime}`);
-        console.log(countdown(new Date(),new Date(vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString());
-        client.user.setStatus('available')
-        client.user.setPresence({
-            game: {
-                name: countdown(new Date(),new Date(vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString()
-            }
-        });
-        console.log();
-        setInterval(() => {
-            var vEndTime = body.end_time;
-            var datetime = countdown(new Date(),new Date(vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
-            console.log(datetime);
-            client.user.setActivity(datetime);
-            if ( Date.parse(new Date()) > Date.parse(vEndTime)){
-                console.log("rebith");
-                rebirth();
-            };
-        }, 60000)
+function getApi(){
+    console.log(request.get(url, { json: true }, (err, res, body) => {
+        if (err) { return console.log(err); }
+        global.vEndTime = body.end_time;
+        console.log(global.vEndTime);
+    }));
+};
+
+client.on('ready', () => {
+    getApi();
+    console.log(`Logged in as ${client.user.tag}!`);
+    console.log(`WvW Ends at: ${global.vEndTime}`);
+    console.log(countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString());
+    client.user.setStatus('available');
+    client.user.setPresence({
+        game: {
+            name: countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString()
+        }
     });
-    client.login(auth.token);
+    console.log();
+    setInterval(() => {
+        var datetime = countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
+        console.log(datetime);
+        client.user.setActivity(datetime);
+        if ( Date.parse(new Date()) > Date.parse(global.vEndTime)){
+            getApi();
+        };
+    }, 60000)
 });
+client.login(auth.token);
