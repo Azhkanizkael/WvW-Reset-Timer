@@ -21,7 +21,7 @@ client.on('ready', () => {
     client.user.setStatus('available');
     client.user.setPresence({
         game: {
-            name: countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString()
+            name: "Connecting to API..."
         }
     });
     console.log();
@@ -31,6 +31,8 @@ client.on('ready', () => {
         client.user.setActivity(datetime);
         if ( Date.parse(new Date()) > Date.parse(global.vEndTime)){
             getApi();
+            var datetime = countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
+            client.user.setActivity(datetime);
         };
     }, 60000)
 });
