@@ -26,14 +26,10 @@ client.on('ready', () => {
     });
     console.log();
     setInterval(() => {
+        getApi();
         var datetime = countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
         console.log(datetime);
         client.user.setActivity(datetime);
-        if ( Date.parse(new Date()) > Date.parse(global.vEndTime)){
-            getApi();
-            var datetime = countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
-            client.user.setActivity(datetime);
-        };
     }, 60000)
 });
 client.login(auth.token);
