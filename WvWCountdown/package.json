@@ -6,8 +6,7 @@
   "author": "Azhkanizkael",
   "dependencies": {
     "countdown": "^2.6.0",
-    "discord.js": "^11.3.2",
-    "rebirth": "^2.0.0",
+    "discord.js": "^14.7.1",
     "request": "^2.88.2"
   }
 }
