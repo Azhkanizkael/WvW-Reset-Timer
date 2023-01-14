@@ -4,7 +4,6 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const auth = require('./auth.json');
 const url = `https://api.guildwars2.com/v2/wvw/matches/${auth.region}-1?access_token=${auth.gw2token}`;
 
-const countdown = require('countdown');
 const request = require('request');
 
 
@@ -30,9 +29,13 @@ client.on('ready', () => {
     
     setInterval(() => {
         getApi();
-        var datetime = countdown(new Date(),new Date(global.vEndTime), countdown.DAYS | countdown.HOURS | countdown.MINUTES).toString();
+        let currentDate = new Date();
+        let diff = global.vEndTime - currentDate;
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         // console.log(datetime);
-        client.user.setActivity(datetime);
+        client.user.setActivity(`${days} days, ${hours} hours, ${minutes} minutes`);
     }, 60000)
 });
 
