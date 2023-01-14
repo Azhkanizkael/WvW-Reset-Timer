@@ -36,9 +36,10 @@ client.on('ready', () => {
 		let days = Math.floor(diff / (1000 * 60 * 60 * 24));
 		let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 		let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-		// console.log(`${days} days, ${hours} hours, ${minutes} minutes`);
-		client.user.setStatus(`${days} days, ${hours} hours, ${minutes} minutes`);
-	}, 1000)
+        let status = `${days} days, ${hours} hours, ${minutes} minutes`
+		// console.log(status);
+        client.user.setActivity(status);
+	}, 60000)
 });
 
 client.login(auth.token);
