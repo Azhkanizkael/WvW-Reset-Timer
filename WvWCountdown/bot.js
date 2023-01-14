@@ -30,11 +30,12 @@ client.on('ready', () => {
     setInterval(() => {
         getApi();
         let currentDate = new Date();
-        let diff = global.vEndTime - currentDate;
+        let dateToCompare = Date.parse(global.vEndTime);
+        let diff = dateToCompare - currentDate;
         let days = Math.floor(diff / (1000 * 60 * 60 * 24));
         let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        // console.log(datetime);
+        // console.log(`${days} days, ${hours} hours, ${minutes} minutes`);
         client.user.setActivity(`${days} days, ${hours} hours, ${minutes} minutes`);
     }, 60000)
 });
