@@ -6,26 +6,37 @@ module.exports = {
 		.setName('subscribe')
 		.setDescription('subscribe to automated alerts')
 		.addStringOption(option => option
-			.setName('region')
-			.setDescription('NA/EU')
+			.setName('Timer Type')
+			.setDescription('Timer Type')
 			.setAutocomplete(true)
 			.setRequired(true)),
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
 		const filtered = pairs.filter(choice => choice.name.toLowerCase().includes(focusedValue.toLowerCase()));
-		let options = ('na','eu')
+		let options = ({
+            name: "lockout", value: "1"
+        },{
+            name: "reset", value: "2"
+        },{
+            name: "team assignment", value: "3"
+        })
 		await interaction.respond(
 			options.map(choice => ({ name: choice.name, value: choice.value })),
 		);
 	},
 	async execute(interaction) {
 		const option1 = interaction.options.getString('Timer');
+		const option2 = interaction.options.getString('Timer');
+		const option3 = interaction.options.getString('Timer');
+		const option4 = interaction.options.getString('Timer');
 		console.log(`Subscription requested for ${option} in Guild: ${interaction.guild.id}, Channel: ${interaction.channel.id}`);
 		const subscription = {
 			guildId: interaction.guild.id,
 			channelId: interaction.channel.id,
 			Timer: option1,
-            DurationBefore: 
+            DaysBefore: option2,
+            HoursBefore: option3,
+            MinutesBefore: option4 
 		};
 		// './commands/data/subscriptions.json'
 		fs.readFile('./commands/data/subscriptions.json', 'utf8', (err, data) => {
