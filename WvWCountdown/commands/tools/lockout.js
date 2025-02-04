@@ -1,2 +1,2 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { getLockoutTimer } = require('.../functions/functions.js')
+const { getTeamAssignmentTimer } = require('../../functions/functions.js')

@@ -6,7 +6,9 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 client.commandArray = [];
 
-const functionFolders = fs.readdirSync('./functions');
+const functionFolders = fs.readdirSync('./functions').filter(folder => 
+    fs.statSync(`./functions/${folder}`).isDirectory()
+);
 
 for (const folder of functionFolders) {
 	const functionFiles = fs

@@ -1,7 +1,7 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
-const auth = require('../../config.json');
+const auth = require('../../auth.json');
 
 
 module.exports = (client) => {
