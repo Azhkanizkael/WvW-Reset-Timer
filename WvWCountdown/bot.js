@@ -15,7 +15,7 @@ client.on('ready', () => {
 			if (error) {
 				console.log('Error:', error);
 			} else {
-				console.log('Reset Timer Value:', Value);
+				//console.log('Reset Timer Value:', Value);
 				let LockOutDate = Value
 				let currentDate = new Date();
 				let dateToCompare = Date.parse(LockOutDate);
@@ -33,7 +33,7 @@ client.on('ready', () => {
 			if (error) {
 				console.log('Error:', error);
 			} else {
-				console.log('Team Assignment Timer Value:', Value);
+				//console.log('Team Assignment Timer Value:', Value);
 				let LockOutDate = Value
 				let currentDate = new Date();
 				let dateToCompare = Date.parse(LockOutDate);
@@ -51,7 +51,7 @@ client.on('ready', () => {
 			if (error) {
 				console.log('Error:', error);
 			} else {
-				console.log('Lockout Timer Value:', Value);
+				//console.log('Lockout Timer Value:', Value);
 				let LockOutDate = Value
 				let currentDate = new Date();
 				let dateToCompare = Date.parse(LockOutDate);
