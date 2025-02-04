@@ -6,6 +6,7 @@
   "author": "Azhkanizkael",
   "dependencies": {
     "discord.js": "^14.7.1",
-    "request": "^2.88.2"
+    "node-cron": "^3.0.3",
+    "postman-request": "^2.88.1-postman.40"
   }
 }

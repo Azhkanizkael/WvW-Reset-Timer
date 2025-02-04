@@ -1,29 +1,39 @@
-function getApi(){	
-    https.get(url, (res) => {
-        if (err) throw err;
-        let data = '';
-        res.on('data', (chunk) => {
-            data += chunk;
-        });
-        res.on('end', () => {
-            const responseData = JSON.parse(data);
-            // console.log(responseData.end_time);
-            global.vEndTime = responseData.end_time
-        });
-      });
+const request = require('postman-request');
+const auth = require('./auth.json');
+
+function getMatchEndTime(url) {	
+
 };
 
-function getLockoutApi(){	
-    https.get(lockouturl, (res) => {
-        if (err) throw err;
-        let data = '';
-        res.on('data', (chunk) => {
-            data += chunk;
-        });
-        res.on('end', () => {
-            const responseLockoutData = JSON.parse(data);
-            // console.log(responseData.end_time);
-            global.vEndTime = responseLockoutData.na
-        });
-      });
+function getLockoutTimer(callback) {    
+    const url = 'https://api.guildwars2.com/v2/wvw/timers/lockout';
+    
+    request({ url, json: true }, (error, response, body) => {
+        if (error) {
+            return callback('Unable to connect to the API.', null);
+        }
+        if (response.statusCode !== 200) {
+            return callback(`Error: ${response.statusCode}`, null);
+        }
+        if(auth.region = 1) {
+            if (!body || !body.na) {
+                return callback('Field "na" not found in response.', null);
+            }
+        } else {
+            if (!body || !body.eu) {
+                return callback('Field "eu" not found in response.', null);
+            }
+        }
+        
+        if(auth.region = 1) {
+            callback(null, body.na);
+        } else {
+            callback(null, body.eu);
+        }
+    });
+}
+
+module.exports = {
+    getLockoutTimer,
+    getMatchEndTime
 };
