@@ -8,8 +8,7 @@ const pairs = ({
 	},{
 		name: "team assignment", value: "3"
 	});
-pairs.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-
+	
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('subscribe')
@@ -56,7 +55,7 @@ module.exports = {
 		const option3 = interaction.options.getString('hours');
 		const option4 = interaction.options.getString('minutes');
 		const option5 = interaction.options.getString('ping');
-		console.log(`Subscription requested for ${option} in Guild: ${interaction.guild.id}, Channel: ${interaction.channel.id}`);
+		console.log(`Subscription requested for ${option1} (days: ${option2}, hours: ${option3}, minutes: ${option4}, ping: ${option5}) in Guild: ${interaction.guild.id}, Channel: ${interaction.channel.id}`);
 		const subscription = {
 			guildId: interaction.guild.id,
 			channelId: interaction.channel.id,
@@ -70,7 +69,14 @@ module.exports = {
 		fs.readFile('./commands/data/subscriptions.json', 'utf8', (err, data) => {
 			if (err) throw err;
 			const dataObject = JSON.parse(data);
-			if (!dataObject.some(item => item.guildId === subscription.guildId && item.channelId === subscription.channelId && item.timer === subscription.Timer && item.daysbefore === subscription.DaysBefore)) {
+			if (!dataObject.some(
+					item => item.guildId === subscription.guildId 
+					&& item.channelId === subscription.channelId 
+					&& item.timer === subscription.Timer 
+					&& item.daysbefore === subscription.DaysBefore
+					&& item.hoursbefore === subscription.HoursBefore
+					&& item.minutesbefore === subscription.MinutesBefore
+					&& item.ping === subscription.Ping)) {
 				dataObject.push(subscription);
 				fs.writeFile('./commands/data/subscriptions.json', JSON.stringify(dataObject), (err) => {
 					if (err) throw err;
@@ -81,6 +87,6 @@ module.exports = {
 				console.log('Data already exists in file');
 			}
 		});
-		await interaction.reply({ content: `Subscription Created for ${option} for ${interaction.guild.name} in the ${interaction.channel.name} channel` });
+		await interaction.reply({ content: `Subscription Created for ${option1} (days: ${option2}, hours: ${option3}, minutes: ${option4}, ping: ${option5}) for ${interaction.guild.name} in the ${interaction.channel.name} channel` });
 	},
 };
