@@ -7,71 +7,49 @@ const { getLockoutTimer, getMatchEndTime, getTeamAssignmentTimer } = require('./
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 async function getTimes() {
-	getMatchEndTime((error, Value) => {
-		if (error) {
-			console.log('Error:', error);
-		} else {
-			//console.log('Reset Timer Value:', Value);
-			let LockOutDate = Value
-			let currentDate = new Date();
-			let dateToCompare = Date.parse(LockOutDate);
-			let diff = dateToCompare - currentDate;
-			let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-			let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-			let status = `${days} days, ${hours} hours, ${minutes} minutes`
-			console.log(`Reset in: ${status}`);
-			//client.user.setActivity(status);
-			global.matchend = `Reset in: ${status}`;
-			global.matchenddays = days;
-			global.matchendhours = hours;
-			global.matchendminutes = minutes;
-		}
-	});
+    try {
+        const matchEndTime = await getMatchEndTime();
+        let currentDate = new Date();
+        let dateToCompare = Date.parse(matchEndTime);
+        let diff = dateToCompare - currentDate;
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        let status = `${days} days, ${hours} hours, ${minutes} minutes`;
+        console.log(`Reset in: ${status}`);
+        global.matchend = `Reset in: ${status}`;
+        global.matchenddays = days;
+        global.matchendhours = hours;
+        global.matchendminutes = minutes;
 
-	getTeamAssignmentTimer((error, Value) => {
-		if (error) {
-			console.log('Error:', error);
-		} else {
-			//console.log('Team Assignment Timer Value:', Value);
-			let LockOutDate = Value
-			let currentDate = new Date();
-			let dateToCompare = Date.parse(LockOutDate);
-			let diff = dateToCompare - currentDate;
-			let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-			let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-			let status = `${days} days, ${hours} hours, ${minutes} minutes`
-			console.log(`Team Assignment in: ${status}`);
-			//client.user.setActivity(status);
-			global.teamassignment = `Team Assignment in: ${status}`;
-			global.teamassignmentdays = days;
-			global.teamassignmenthours = hours;
-			global.teamassignmentminutes = minutes;
-		}
-	});
+        const teamAssignmentTime = await getTeamAssignmentTimer();
+        dateToCompare = Date.parse(teamAssignmentTime);
+        diff = dateToCompare - currentDate;
+        days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        status = `${days} days, ${hours} hours, ${minutes} minutes`;
+        console.log(`Team Assignment in: ${status}`);
+        global.teamassignment = `Team Assignment in: ${status}`;
+        global.teamassignmentdays = days;
+        global.teamassignmenthours = hours;
+        global.teamassignmentminutes = minutes;
 
-	getLockoutTimer((error, Value) => {
-		if (error) {
-			console.log('Error:', error);
-		} else {
-			//console.log('Lockout Timer Value:', Value);
-			let LockOutDate = Value
-			let currentDate = new Date();
-			let dateToCompare = Date.parse(LockOutDate);
-			let diff = dateToCompare - currentDate;
-			let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-			let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-			let status = `${days} days, ${hours} hours, ${minutes} minutes`
-			console.log(`Lockout in: ${status}`);
-			//client.user.setActivity(status);
-			global.lockout = `Lockout in: ${status}`;
-			global.lockoutdays = days;
-			global.lockouthours = hours;
-			global.lockoutminutes = minutes;
-		}
-	});
+        const lockoutTime = await getLockoutTimer();
+        dateToCompare = Date.parse(lockoutTime);
+        diff = dateToCompare - currentDate;
+        days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        status = `${days} days, ${hours} hours, ${minutes} minutes`;
+        console.log(`Lockout in: ${status}`);
+        global.lockout = `Lockout in: ${status}`;
+        global.lockoutdays = days;
+        global.lockouthours = hours;
+        global.lockoutminutes = minutes;
+    } catch (error) {
+        console.log('Error:', error);
+    }
 }
 
 async function post(timerType,days,hours,minutes) {
@@ -104,13 +82,11 @@ async function post(timerType,days,hours,minutes) {
 }
 
 async function executetasks() {
-	let times = await getTimes();
+	await getTimes();
 
-	if(global.matchend){
-		post('reset',global.matchenddays,global.matchendhours,global.matchendminutes);
-		post('lockout',global.lockoutdays,global.lockouthours,global.lockoutminutes);
-		post('teamassignment',global.teamassignmentdays,global.teamassignmenthours,global.teamassignmentminutes);
-	}
+	await post('reset',global.matchenddays,global.matchendhours,global.matchendminutes);
+	await post('lockout',global.lockoutdays,global.lockouthours,global.lockoutminutes);
+	await post('teamassignment',global.teamassignmentdays,global.teamassignmenthours,global.teamassignmentminutes);
 }
 
 client.on('ready', () => {
