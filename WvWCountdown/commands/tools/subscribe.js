@@ -1,34 +1,61 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const fs = require('fs');
+
+const pairs = ({
+		name: "lockout", value: "1"
+	},{
+		name: "reset", value: "2"
+	},{
+		name: "team assignment", value: "3"
+	});
+pairs.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('subscribe')
 		.setDescription('subscribe to automated alerts')
 		.addStringOption(option => option
-			.setName('Timer Type')
-			.setDescription('Timer Type')
+			.setName('timertype')
+			.setDescription('Select a timer type')
 			.setAutocomplete(true)
-			.setRequired(true)),
+			.setRequired(true))
+		.addStringOption(option => option
+			.setName('days')
+			.setDescription('How many days prior would you like the alert?')
+			.setRequired(true))
+		.addStringOption(option => option
+			.setName('hours')
+			.setDescription('How many hours prior would you like the alert?')
+			.setRequired(true))
+		.addStringOption(option => option
+			.setName('minutes')
+			.setDescription('How many minutes prior would you like the alert?')
+			.setRequired(true))
+		.addStringOption(option => option
+			.setName('ping')
+			.setDescription('What group would you like to ping with this alert? (leave blank for none)')
+			.setRequired(false))
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
 		const filtered = pairs.filter(choice => choice.name.toLowerCase().includes(focusedValue.toLowerCase()));
-		let options = ({
-            name: "lockout", value: "1"
-        },{
-            name: "reset", value: "2"
-        },{
-            name: "team assignment", value: "3"
-        })
+		let options;
+		if (filtered.length > 25) {
+			options = filtered.slice(0, 25);
+		}
+		else {
+			options = filtered;
+		}
 		await interaction.respond(
 			options.map(choice => ({ name: choice.name, value: choice.value })),
 		);
 	},
 	async execute(interaction) {
-		const option1 = interaction.options.getString('Timer');
-		const option2 = interaction.options.getString('Timer');
-		const option3 = interaction.options.getString('Timer');
-		const option4 = interaction.options.getString('Timer');
+		const option1 = interaction.options.getString('timertype');
+		const option2 = interaction.options.getString('days');
+		const option3 = interaction.options.getString('hours');
+		const option4 = interaction.options.getString('minutes');
+		const option5 = interaction.options.getString('ping');
 		console.log(`Subscription requested for ${option} in Guild: ${interaction.guild.id}, Channel: ${interaction.channel.id}`);
 		const subscription = {
 			guildId: interaction.guild.id,
@@ -36,13 +63,14 @@ module.exports = {
 			Timer: option1,
             DaysBefore: option2,
             HoursBefore: option3,
-            MinutesBefore: option4 
+            MinutesBefore: option4,
+			Ping: option5
 		};
 		// './commands/data/subscriptions.json'
 		fs.readFile('./commands/data/subscriptions.json', 'utf8', (err, data) => {
 			if (err) throw err;
 			const dataObject = JSON.parse(data);
-			if (!dataObject.some(item => item.guildId === subscription.guildId && item.channelId === subscription.channelId && item.URI === subscription.URI)) {
+			if (!dataObject.some(item => item.guildId === subscription.guildId && item.channelId === subscription.channelId && item.timer === subscription.Timer && item.daysbefore === subscription.DaysBefore)) {
 				dataObject.push(subscription);
 				fs.writeFile('./commands/data/subscriptions.json', JSON.stringify(dataObject), (err) => {
 					if (err) throw err;
