@@ -5,7 +5,17 @@
   "main": "bot.js",
   "author": "Azhkanizkael",
   "dependencies": {
+    "@discordjs/rest": "^2.2.0",
+    "discord-api-types": "^0.37.119",
     "discord.js": "^14.7.1",
-    "request": "^2.88.2"
-  }
+    "node-cron": "^3.0.3",
+    "postman-request": "^2.88.1-postman.40"
+  },
+  "devDependencies": {
+    "eslint": "^9.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC"
 }
