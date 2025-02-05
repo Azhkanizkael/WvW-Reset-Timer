@@ -1,14 +1,9 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const fs = require('fs');
 
-const pairs = ({
-		name: "lockout", value: "1"
-	},{
-		name: "reset", value: "2"
-	},{
-		name: "team assignment", value: "3"
-	});
-	
+const choices = require('../data/timertypes.json');
+const pairs = choices.map(options => ({ name: options[0], value: options[0] }));
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('subscribe')
