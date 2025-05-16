@@ -5,7 +5,7 @@
   "main": "bot.js",
   "author": "Azhkanizkael",
   "dependencies": {
-    "@discordjs/rest": "^2.2.0",
+    "@discordjs/rest": "^2.4.2",
     "discord-api-types": "^0.37.119",
     "discord.js": "^14.7.1",
     "node-cron": "^3.0.3",
